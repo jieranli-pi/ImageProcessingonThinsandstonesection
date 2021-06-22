@@ -2,7 +2,9 @@ import pandas as pd
 import numpy as np
 from matplotlib import pyplot as plt
 
+#change csv
 data = pd.read_csv("D:/Thesis_DATA/4_report/Overview_Burg_result.csv")
+#data = pd.read_csv("D:/Thesis_DATA/1_report/Results_overview_Bent.csv")
 
 #Area in nm^2
 Area = data[['Area']].to_numpy()[:,0]
@@ -28,8 +30,10 @@ print('number of Enlongate=',np.size(Enlongate_shape))
 plt.figure(0)
 plt.hist(Shape_factor, color = 'blue', edgecolor = 'black',
          bins = int(1000))
+plt.axvline(0.04, color='r', linestyle='--')
+plt.axvline(0.015, color='r', linestyle='--')
 # Add labels
-plt.title('The frequency of shape index')
+plt.title('The distribution of Pore shape index')
 plt.xlabel('Shape Index')
 plt.ylabel('Frequency')
 
@@ -48,7 +52,9 @@ print('number of Small=',np.size(Small_size))
 plt.figure(1)
 plt.hist(Area, color = 'blue', edgecolor = 'black',
          bins = int(1000))
+plt.axvline(156000000000, color='r', linestyle='--')
+plt.axvline(15600000000, color='r', linestyle='--')
 # Add labels
-plt.title('The frequency of particle area')
-plt.xlabel('Particle Area')
+plt.title('The Pore size distribution')
+plt.xlabel('The single pore Area (unit in nm^2)')
 plt.ylabel('Frequency')
