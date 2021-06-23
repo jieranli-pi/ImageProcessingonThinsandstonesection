@@ -5,6 +5,11 @@ import time
 start = time.time()
 """
 Change directory to the photo to be opened
+The windows file explorer/ python file sequnce(sorting) are not the exactly the same.
+Example: windows "0x1", "1x30", "2x30", "10x30"
+python"0x1", "1x30", "10x30", "2x30"
+
+The purpose of this code is to detect the strings separated by "x", and correcting the sorting sequence for python, so that later the images could be loaded corrected.
 """
 input_directory_image='D:/Thesis_DATA/4/Test/output_combine/train_data/images/'
 input_directory_array='D:/Thesis_DATA/4/Test/output_combine/train_data/Arrays/'
