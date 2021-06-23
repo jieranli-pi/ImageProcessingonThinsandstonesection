@@ -5,6 +5,7 @@ For this project, I use Python as my programming language.
 
 Interesting topics including:
 
-1) Thresholding
+1) Thresholding, and the impact of threshold value on the porosity
 2) Merging tiles
 3) Classifying areas/shape index of pores/grains for sandstones
+4) finding the margin between connected objects(grains) and cut those
