@@ -1,0 +1,177 @@
+import pandas as pd 
+import numpy as np
+from matplotlib import pyplot as plt
+plt.close('all')
+
+def reject_outliers(data, m): #data to remove outlier, m is the degree to smoothen
+    return data[abs(data - np.mean(data)) < m * np.std(data)]
+def reject_outliers_2(data, m=2.):
+    d = np.abs(data - np.median(data))
+    mdev = np.median(d)
+    s = d / (mdev if mdev else 1.)
+    return data[s < m]
+#change csv
+data = pd.read_csv("D:/Thesis_DATA/1_report/Results_Pores.csv")
+#data = pd.read_csv("D:/Thesis_DATA/1_report/Results_Pores.csv")
+
+#Area in nm^2
+Area = data[['Area']].to_numpy()[:,0]
+#Perimeter in nm
+Perimeter = data[['Perim.']].to_numpy()[:,0]
+
+#shape factor=A/p^2
+Shape_factor=Area/Perimeter**2
+
+#Shape index statistics
+#Shape index >=0.04 Round
+Round_Shape=np.where(Shape_factor>=0.04)
+# 0.015 - 0.04 Intermediate
+Intermediate_Shape=np.where(np.logical_and(Shape_factor>=0.015, Shape_factor<0.04))
+#<0.015 Enlongate
+Enlongate_shape=np.where(np.logical_and(Shape_factor>=0, Shape_factor<0.015))
+
+print('number of Round=',np.size(Round_Shape))
+print('number of Intermediate=',np.size(Intermediate_Shape))
+print('number of Enlongate=',np.size(Enlongate_shape))
+
+#Distribution of shape indexes
+plt.figure(0)
+#plt.hist(Shape_factor, color = 'blue', edgecolor = 'black', bins = np.size(Shape_factor))
+plt.hist(Shape_factor, color = 'blue', edgecolor = 'black', bins = int(50))
+plt.axvline(0.04, color='r', linestyle='--')
+plt.axvline(0.015, color='r', linestyle='--')
+# Add labels
+plt.title('The distribution of Pore shape index')
+plt.xlabel('Shape Index')
+plt.ylabel('Frequency')
+
+#Area statistics
+size_0_200=np.where(np.logical_and(Area>=0, Area<200000000))
+size_200_500=np.where(np.logical_and(Area>=200000000, Area<500000000))
+size_500_5000=np.where(np.logical_and(Area>=500000000, Area<5000000000))
+size_5000_10000=np.where(np.logical_and(Area>=5000000000, Area<1000000000))
+size_10000=np.where(Area>=1000000000)
+print('number of 0_200 micrometer square=',np.size(size_0_200))
+print('number of 200_500 micrometer square=',np.size(size_200_500))
+print('number of 500_5000 micrometer square=',np.size(size_500_5000))
+print('number of 5000_10000 micrometer square=',np.size(size_5000_10000))
+print('number of >10000 micrometer square=',np.size(size_10000))
+
+#Distribution of poresize
+plt.figure(1)
+#plt.hist(Area_smooth, color = 'blue', edgecolor = 'black',bins = np.size(Area_smooth))
+plt.hist(Area, color = 'blue', edgecolor = 'black',bins = int(100))
+# Add labels
+plt.title('The Pore size distribution')
+plt.xlabel('The single pore Area (unit in nm^2)')
+plt.ylabel('Frequency')
+
+#clipping in terms of grain size
+clipped_Area_0_200 = Area[size_0_200]
+clipped_Area_200_500 = Area[size_200_500]
+clipped_Area_500_5000 = Area[size_500_5000]
+clipped_Area_5000_10000 = Area[size_5000_10000]
+clipped_Area_10000 = Area[size_10000]
+
+clipped_Peri_0_200 = Perimeter[size_0_200]
+clipped_Peri_200_500 = Perimeter[size_200_500]
+clipped_Peri_500_5000 = Perimeter[size_500_5000]
+clipped_Peri_5000_10000 = Perimeter[size_5000_10000]
+clipped_Peri_10000 = Perimeter[size_10000]
+
+Shape_factor_0_200=clipped_Area_0_200/clipped_Peri_0_200**2
+Shape_factor_200_500=clipped_Area_200_500/clipped_Peri_200_500**2
+Shape_factor_500_5000=clipped_Area_500_5000/clipped_Peri_500_5000**2
+Shape_factor_5000_10000=clipped_Area_5000_10000/clipped_Peri_5000_10000**2
+Shape_factor_10000=clipped_Area_10000/clipped_Peri_10000**2
+
+
+plt.figure(2)
+#plt.hist(Area_smooth, color = 'blue', edgecolor = 'black',bins = np.size(Area_smooth))
+plt.hist(clipped_Area_0_200, color = 'blue', edgecolor = 'black',bins = int(100))
+# Add labels
+plt.title('The Pore size distribution below 200 um^2')
+plt.xlabel('The single pore Area (unit in nm^2)')
+plt.ylabel('Frequency')
+
+plt.figure(3)
+#plt.hist(Area_smooth, color = 'blue', edgecolor = 'black',bins = np.size(Area_smooth))
+plt.hist(Shape_factor_0_200, color = 'blue', edgecolor = 'black',bins = int(100))
+plt.axvline(0.04, color='r', linestyle='--')
+plt.axvline(0.015, color='r', linestyle='--')
+# Add labels
+plt.title('The distribution of Pore shape index below 200 um^2')
+plt.xlabel('Shape Index')
+plt.ylabel('Frequency')
+
+plt.figure(4)
+#plt.hist(Area_smooth, color = 'blue', edgecolor = 'black',bins = np.size(Area_smooth))
+plt.hist(clipped_Area_200_500, color = 'blue', edgecolor = 'black',bins = int(100))
+# Add labels
+plt.title('The Pore size distribution 200 to 500 um^2')
+plt.xlabel('The single pore Area (unit in nm^2)')
+plt.ylabel('Frequency')
+
+plt.figure(5)
+#plt.hist(Area_smooth, color = 'blue', edgecolor = 'black',bins = np.size(Area_smooth))
+plt.hist(Shape_factor_200_500, color = 'blue', edgecolor = 'black',bins = int(100))
+plt.axvline(0.04, color='r', linestyle='--')
+plt.axvline(0.015, color='r', linestyle='--')
+# Add labels
+plt.title('The distribution of Pore shape index 200 to 500 um^2')
+plt.xlabel('Shape Index')
+plt.ylabel('Frequency')
+
+plt.figure(6)
+#plt.hist(Area_smooth, color = 'blue', edgecolor = 'black',bins = np.size(Area_smooth))
+plt.hist(clipped_Area_500_5000, color = 'blue', edgecolor = 'black',bins = int(100))
+# Add labels
+plt.title('The Pore size distribution 500 to 5000 um^2')
+plt.xlabel('The single pore Area (unit in nm^2)')
+plt.ylabel('Frequency')
+
+plt.figure(7)
+#plt.hist(Area_smooth, color = 'blue', edgecolor = 'black',bins = np.size(Area_smooth))
+plt.hist(Shape_factor_500_5000, color = 'blue', edgecolor = 'black',bins = int(100))
+plt.axvline(0.04, color='r', linestyle='--')
+plt.axvline(0.015, color='r', linestyle='--')
+# Add labels
+plt.title('The distribution of Pore shape index 500 to 5000 um^2')
+plt.xlabel('Shape Index')
+plt.ylabel('Frequency')
+
+plt.figure(7)
+#plt.hist(Area_smooth, color = 'blue', edgecolor = 'black',bins = np.size(Area_smooth))
+plt.hist(clipped_Area_5000_10000, color = 'blue', edgecolor = 'black',bins = int(100))
+# Add labels
+plt.title('The Pore size distribution 5000 to 10000 um^2')
+plt.xlabel('The single pore Area (unit in nm^2)')
+plt.ylabel('Frequency')
+
+plt.figure(8)
+#plt.hist(Area_smooth, color = 'blue', edgecolor = 'black',bins = np.size(Area_smooth))
+plt.hist(Shape_factor_5000_10000, color = 'blue', edgecolor = 'black',bins = int(100))
+plt.axvline(0.04, color='r', linestyle='--')
+plt.axvline(0.015, color='r', linestyle='--')
+# Add labels
+plt.title('The distribution of Pore shape index 5000 to 10000 um^2')
+plt.xlabel('Shape Index')
+plt.ylabel('Frequency')
+
+plt.figure(9)
+#plt.hist(Area_smooth, color = 'blue', edgecolor = 'black',bins = np.size(Area_smooth))
+plt.hist(clipped_Area_10000, color = 'blue', edgecolor = 'black',bins = int(100))
+# Add labels
+plt.title('The Pore size distribution above 10000 um^2')
+plt.xlabel('The single pore Area (unit in nm^2)')
+plt.ylabel('Frequency')
+
+plt.figure(10)
+#plt.hist(Area_smooth, color = 'blue', edgecolor = 'black',bins = np.size(Area_smooth))
+plt.hist(Shape_factor_10000, color = 'blue', edgecolor = 'black',bins = int(100))
+plt.axvline(0.04, color='r', linestyle='--')
+plt.axvline(0.015, color='r', linestyle='--')
+# Add labels
+plt.title('The distribution of Pore shape index above 10000 um^2')
+plt.xlabel('Shape Index')
+plt.ylabel('Frequency')
