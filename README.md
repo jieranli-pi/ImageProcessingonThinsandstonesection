@@ -7,3 +7,4 @@ Interesting topics including:
 
 1) Thresholding
 2) Merging tiles
+3) Classifying areas/shape index of pores/grains for sandstones
