@@ -10,4 +10,4 @@ Interesting topics including:
 3) Classifying areas/shape index of pores/grains for sandstones
 4) finding the margin between connected objects(grains) and cut those
 
-Images below size of 25 mb are also put here
+Images below size of 25 mb are also put in this directory
