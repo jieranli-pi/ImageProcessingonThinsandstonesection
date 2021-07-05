@@ -9,3 +9,5 @@ Interesting topics including:
 2) Merging tiles
 3) Classifying areas/shape index of pores/grains for sandstones
 4) finding the margin between connected objects(grains) and cut those
+
+Images below size of 25 mb are also put here
